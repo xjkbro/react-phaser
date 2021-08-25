@@ -3,8 +3,7 @@ import Phaser from "phaser";
 export default class FirstGame extends Phaser.Scene {
     constructor() {
         super("hello-world");
-        let platforms, scoreText, bombs, player, stars, cursors;
-        let score = 0;
+        this.score = 0;
     }
 
     preload() {

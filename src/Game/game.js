@@ -3,7 +3,7 @@ import Phaser from "phaser";
 import { IonPhaser } from "@ion-phaser/react";
 import HelloWorldScene from "./scene/HelloWorldScene";
 import { SpinnyBoy } from "./scene/SpinnyBoy";
-import FirstGame from "./scene/FirstGame/FirstGame";
+import FirstGame from "./scene/FirstGame";
 
 class Game extends Component {
     state = {
