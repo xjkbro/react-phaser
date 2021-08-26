@@ -147,5 +147,6 @@ export default class FirstGame extends Phaser.Scene {
         player.anims.play("turn");
 
         this.gameOver = true;
+        console.log("GAMEOVER");
     }
 }
