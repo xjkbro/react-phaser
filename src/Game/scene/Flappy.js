@@ -1,8 +1,8 @@
 import Phaser from "phaser";
 
-export default class FirstGame extends Phaser.Scene {
+export default class Flappy extends Phaser.Scene {
     constructor() {
-        super("hello-world");
+        super("flappy");
         this.score = 0;
     }
 
