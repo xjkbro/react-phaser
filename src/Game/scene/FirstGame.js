@@ -22,18 +22,53 @@ export default class FirstGame extends Phaser.Scene {
         console.log(this.score);
         this.add.image(400, 300, "sky");
 
-        this.platforms = this.physics.add.staticGroup();
+        this.platforms = this.createPlatforms();
+        this.player = this.createPlayer();
+        this.stars = this.createStars();
 
-        this.platforms.create(400, 568, "ground").setScale(2).refreshBody();
+        this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.stars, this.platforms);
 
-        this.platforms.create(600, 400, "ground");
-        this.platforms.create(50, 250, "ground");
-        this.platforms.create(750, 220, "ground");
+        this.physics.add.overlap(
+            this.player,
+            this.stars,
+            this.collectStar,
+            null,
+            this
+        );
 
-        this.player = this.physics.add.sprite(100, 450, "dude");
+        this.scoreText = this.add.text(16, 16, "score: 0", {
+            fontSize: "32px",
+            fill: "#000",
+        });
 
-        this.player.setBounce(0.2);
-        this.player.setCollideWorldBounds(true);
+        this.bombs = this.physics.add.group();
+
+        this.physics.add.collider(this.bombs, this.platforms);
+
+        this.physics.add.collider(
+            this.player,
+            this.bombs,
+            this.hitBomb,
+            null,
+            this
+        );
+    }
+    createPlatforms() {
+        const platforms = this.physics.add.staticGroup();
+
+        platforms.create(400, 568, "ground").setScale(2).refreshBody();
+
+        platforms.create(600, 400, "ground");
+        platforms.create(50, 250, "ground");
+        platforms.create(750, 220, "ground");
+        return platforms;
+    }
+    createPlayer() {
+        const player = this.physics.add.sprite(100, 450, "dude");
+
+        player.setBounce(0.2);
+        player.setCollideWorldBounds(true);
 
         this.anims.create({
             key: "left",
@@ -60,40 +95,19 @@ export default class FirstGame extends Phaser.Scene {
             frameRate: 10,
             repeat: -1,
         });
-        this.physics.add.collider(this.player, this.platforms);
-        this.stars = this.physics.add.group({
+        return player;
+    }
+    createStars() {
+        const stars = this.physics.add.group({
             key: "star",
             repeat: 11,
             setXY: { x: 12, y: 0, stepX: 70 },
         });
 
-        this.stars.children.iterate(function (child) {
+        stars.children.iterate(function (child) {
             child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
         });
-        this.physics.add.collider(this.stars, this.platforms);
-        this.physics.add.overlap(
-            this.player,
-            this.stars,
-            this.collectStar,
-            null,
-            this
-        );
-
-        this.scoreText = this.add.text(16, 16, "score: 0", {
-            fontSize: "32px",
-            fill: "#000",
-        });
-        this.bombs = this.physics.add.group();
-
-        this.physics.add.collider(this.bombs, this.platforms);
-
-        this.physics.add.collider(
-            this.player,
-            this.bombs,
-            this.hitBomb,
-            null,
-            this
-        );
+        return stars;
     }
 
     update() {

@@ -24,7 +24,7 @@ class Game extends Component {
                     gravity: { y: 200 },
                 },
             },
-            scene: [FlappyBird],
+            scene: [FirstGame],
         },
     };
 
