@@ -27,6 +27,7 @@ export default class FirstGame extends Phaser.Scene {
         this.stars = this.createStars();
 
         this.physics.add.collider(this.player, this.platforms);
+
         this.physics.add.collider(this.stars, this.platforms);
 
         this.physics.add.overlap(

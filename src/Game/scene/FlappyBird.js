@@ -35,21 +35,31 @@ export default class FlappyBird extends Phaser.Scene {
     }
     create() {
         this.gameOver = false;
-
         this.createBackground();
-        this.pipes = this.createPipes();
-        this.ground = this.createGround();
+
+        this.pipes = this.createPipe(200, 200);
         this.player = this.createPlayer();
+        // this.pipes = this.physics.add.staticGroup();
+        this.ground = this.createGround();
         this.message = this.createMessage();
 
         this.player.setGravityY(BIRD_GRAVITY);
         this.physics.pause();
+
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.physics.add.existing(this.ground, true);
-        this.player.setCollideWorldBounds(true);
-        this.physics.add.collider(this.player, this.pipes);
+        this.physics.add.collider(this.ground, this.player);
 
+        this.physics.add.collider(this.ground, this.pipes);
+
+        this.physics.add.collider(
+            this.player,
+            this.pipes,
+            this.collidedPipe,
+            null,
+            this
+        );
         this.physics.add.collider(
             this.player,
             this.ground,
@@ -61,7 +71,7 @@ export default class FlappyBird extends Phaser.Scene {
     update() {
         this.flap();
         this.moveGround();
-        this.movePipes();
+        // this.movePipes();
     }
 
     flap() {
@@ -88,7 +98,10 @@ export default class FlappyBird extends Phaser.Scene {
     }
 
     movePipes() {
+        // console.log(this.pipes.);
+        // this.pipes.setY(0);
         if (!this.gameOver) this.pipes.incX(-GROUND_VELOCITY);
+        // if (!this.gameOver) this.pipes.incY(0,));
     }
 
     // Create Background Group
@@ -142,36 +155,66 @@ export default class FlappyBird extends Phaser.Scene {
         return ground;
     }
 
-    createPipes() {
-        const pipes = this.physics.add.staticGroup();
+    // createPipes() {
+    //     const pipes = this.physics.add.group();
 
-        let i = 0;
-        for (let i = 0; i < PIPE_PAIRS; i += 1) {
-            // while () {
-            const y = Phaser.Math.Between(-420 * 0.6, 0); //This is the gap between Top and bottom pipes
-            const deltaX = i * PIPE_GAP_LENGTH + 500; //Thiss is the gap between pipes on Y-axis
+    //     // let i = 0;
+    //     const { width, height } = this.scale;
 
-            const top = this.add.image(deltaX, y, PIPE).setOrigin(0, 0);
-            top.flipY = true;
+    //     for (let i = 0; i < PIPE_PAIRS; i += 1) {
+    //         // while () {
+    //         const y = Phaser.Math.Between(-420 * 0.6, 0); //This is the gap between Top and bottom pipes
+    //         const deltaX = i * PIPE_GAP_LENGTH; //Thiss is the gap between pipes on X-axis
 
-            const bottom = this.add
-                .image(deltaX, y + PIPE_GAP_HEIGHT + PIPE_HEIGHT, PIPE)
-                .setOrigin(0, 0);
+    //         const top = this.add.image(deltaX, y + height / 4, PIPE);
+    //         top.flipY = true;
 
-            pipes.add(top);
-            pipes.add(bottom);
+    //         const bottom = this.add.image(
+    //             deltaX,
+    //             y + height / 4 + PIPE_GAP_HEIGHT + PIPE_HEIGHT,
+    //             PIPE
+    //         );
 
-            // i += 1;
-        }
+    //         pipes.add(top);
+    //         pipes.add(bottom);
 
-        return pipes;
+    //         // i += 1;
+    //     }
+
+    //     return pipes;
+    // }
+    createPipe(x, y) {
+        // const y = Phaser.Math.Between(-420 * 0.6, 0); //This is the gap between Top and bottom pipes
+        // const deltaX = i * PIPE_GAP_LENGTH; //Thiss is the gap between pipes on X-axis
+        // const pipes = this.physics.add.group();
+        const pipe = this.physics.add.image(600, 500, PIPE);
+        const pipe2 = this.physics.add.image(600, 10, PIPE);
+
+        pipe2.flipY = true;
+        pipe.body.velocity.x = -200;
+        pipe2.body.velocity.x = -200;
+
+        pipe.body.allowGravity = false;
+        pipe2.body.allowGravity = false;
+        // pipe.disableBody();
+
+        // pipe.setCollideWorldBounds(true);
+        // pipes.add(pipe);
+        // pipes.add(pipe2);
+        return pipe2;
     }
+    createPipeSet() {}
 
     collidedFloor(player, ground) {
+        // if (this.gameOver == true) return;
+
+        // this.gameOver == true;
+
         this.gameIsOver(player);
         return;
     }
     collidedPipe(player, pipes) {
+        console.log("sss");
         this.gameIsOver(player);
         return;
     }

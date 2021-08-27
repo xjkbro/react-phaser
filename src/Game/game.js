@@ -7,17 +7,16 @@ import FirstGame from "./scene/FirstGame";
 import TestGame from "./scene/TestGame";
 import Flappy from "./scene/Flappy";
 import FlappyBird from "./scene/FlappyBird";
+import NewFlaps from "./scene/NewFlaps";
 
 class Game extends Component {
-    GameState = {
+    FirstGameState = {
         initialize: true,
         game: {
             type: Phaser.AUTO,
             autoCenter: true,
             width: 800,
             height: 600,
-            // width: 400,
-            // height: 600,
             physics: {
                 default: "arcade",
                 arcade: {
@@ -27,10 +26,57 @@ class Game extends Component {
             scene: FirstGame,
         },
     };
+    FlappyBirdState = {
+        initialize: true,
+        game: {
+            type: Phaser.AUTO,
+            autoCenter: true,
+            width: 800,
+            height: 600,
+            physics: {
+                default: "arcade",
+                arcade: {
+                    gravity: { y: 200 },
+                },
+            },
+            scene: FlappyBird,
+        },
+    };
+    NewFlapsState = {
+        initialize: true,
+        game: {
+            type: Phaser.AUTO,
+            autoCenter: true,
+            width: 800,
+            height: 600,
+            physics: {
+                default: "arcade",
+                arcade: {
+                    gravity: { y: 200 },
+                },
+            },
+            scene: NewFlaps,
+        },
+    };
 
     render() {
-        const { initialize, game } = this.GameState;
-        return <IonPhaser game={game} initialize={initialize} />;
+        // const { initialize, game } = this.FirstGameState;
+        return (
+            <>
+                <IonPhaser
+                    game={this.NewFlapsState.game}
+                    initialize={this.NewFlapsState.initialize}
+                />
+                {/* <IonPhaser
+                game={this.FlappyBirdState.game}
+                initialize={this.FlappyBirdState.initialize}
+            /> */}
+                {/* <IonPhaser
+                    game={this.FirstGameState.game}
+                    initialize={this.FirstGameState.initialize}
+                /> */}
+            </>
+        );
     }
 }
 
